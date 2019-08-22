@@ -1,31 +1,304 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿
+@{
+    Layout = null;
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+<!DOCTYPE html>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>xx省xx石油公司 油站 OA管理系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--收藏用logo图标-->
+    <link rel="bookmark" type="image/x-icon" href="Content/Image/favicon-20180419020137274.ico" />
+    <!--网站显示页logo图标-->
+    <link rel="shortcut icon" href="Content/Image/favicon-20180419020137274.ico">
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/layui/css/global.css" rel="stylesheet" />
+
+    <style type="text/css">
+        .site-demo-result {
+            position: absolute;
+            /* right: 0; */
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+
+    <script type="text/javascript" src="~/Scripts/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="~/layui/layui.js"></script>
+    <script type="text/javascript" src="~/layui/layui.all.js"></script>
+    <script src="~/Scripts/jquery.json.js"></script>
+    <script type="text/javascript">
+        //文档加载完毕执行代码
+        $(function () {
+
+            //展开折叠菜单
+            $(".layui-nav-item a").click(function () {
+                if (!$(this).parent().eq(0).hasClass("layui-nav-itemed")) {
+                    $(this).parent().eq(0).addClass("layui-nav-itemed");
+                    return false;
+                }
+                else {
+                    $(this).parent().eq(0).removeClass("layui-nav-itemed");
+                    return false;
+                }
+            });
+
+            //打开页面
+            $(".layui-nav-child a").click(function () {
+                var url = $(this).attr("url");
+                if (url != null && url != undefined && url.trim() != "") {
+                    $("#mainContent").attr("src", url);
+                }
+            });
+        });
+
+        //修改密码
+        function ModifyPassword() {
+            layer.open({
+                type: 2,
+                content: "BasicDataMaintenance/ModifyPasswordView.aspx",
+                area: ['460px', '330px'],
+                title: "修改密码"
+            });
+        }
+
+        //退出
+        function Exit() {
+            layer.confirm("确定要退出吗？",
+                {
+                    btn: ["确定", "取消"]
+                }, function (index, layero) {
+                        window.location.href = "/Home/Login";
+                }, function () {
+                    //取消操作的代码
+                });
+
+
+
+        }
+
+/**/</script>
+</head>
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header header header-demo">
+            <div class="layui-main">
+                <br />
+                <marquee behavior="scroll" direction="right" scrolldelay="1" scrollamount="2" onmouseover="this.stop()" onmouseout="this.start()" style="height: auto; width: 80%;">
+                    <a style="color:white;" href="javascript:void(0)">
+                        <i class="layui-icon" style="font-size: 15px; color: #1E9FFF;">&#xe68e;</i>    欢迎您 &nbsp;@ViewBag.Name
+                    </a>
+                </marquee>
+
+                <ul class="layui-nav">
+                    <li class="layui-nav-item ">
+                        <a href="/doc/">帮助文档<!-- <span class="layui-badge-dot"></span> --></a>
+                    </li>
+                    <li class="layui-nav-item layui-this">
+                        <a href="javascript:void(0)" onclick="ModifyPassword()">修改密码<!--  --></a>
+                    </li>
+
+                    <li class="layui-nav-item layui-hide-xs">
+                        <a href="javascript:void(0)" onclick="Exit()" target="_blank">退出</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+
+                <ul class="layui-nav layui-nav-tree site-demo-nav">
+                    <!--layui-nav-itemed-->
+                    <li class="layui-nav-item">
+                        <a class="javascript:;" href="javascript:;">
+                            <i class="layui-icon" style="font-size: 15px;">&#xe63c;</i>
+                           
+                            <span class="layui-nav-more"></span>
+                        </a>
+
+                       
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="javscript:void(0)" url="<%=itemp.Url%>">
+                                    <i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;<%=itemp.Name %>
+                                </a>
+                            </dd>
+                        </dl>
+                        
+                    </li>
+                  
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a class="javascript:;" href="javascript:;">
+                            <i class="layui-icon" style="font-size: 15px;">&#xe63c;</i>
+                            加油站日常
+                            <span class="layui-nav-more"></span>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="javscript:void(0)" url="OilStationDaily/EntryManager.aspx">
+                                    <i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;员工入职申请
+                                </a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;员工离职申请</a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;油料领用申请</a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;设备维修申请</a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;初始事故报告</a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;未遂事故报告</a>
+                            </dd>
+                        </dl>
+                    </li>
+
+                    <li class="layui-nav-item">
+                        <a class="javascript:;" href="javascript:;">
+                            <i class="layui-icon" style="font-size: 15px;">&#xe631;</i>
+                            基础信息维护
+                            <span class="layui-nav-more"></span>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/" url="BasicDataMaintenance/OrganizationStructureManger.aspx">
+                                    <i class="layui-icon" style="font-size: 10px;">&#xe613;</i>&nbsp;组织机构管理
+                                </a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/" url="BasicDataMaintenance/JobManager.aspx">
+                                    <i class="layui-icon" style="font-size: 15px;">&#xe600;</i>&nbsp;职位管理
+                                </a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/" url="BasicDataMaintenance/StaffManager.aspx">
+                                    <i class="layui-icon" style="font-size: 10px;">&#xe612;</i>&nbsp;员工基础信息管理
+                                </a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/" url="BasicDataMaintenance/HSEGroupManager.aspx">
+                                    <i class="layui-icon" style="font-size: 15px;">&#xe756;</i>&nbsp;HSE组人员设置
+                                </a>
+                            </dd>
+                        </dl>
+                    </li>
+
+                    <li class="layui-nav-item">
+                        <a class="javascript:;" href="javascript:;">
+                            <i class="layui-icon" style="font-size: 15px;">&#xe620;</i>
+                            系统设置
+                            <span class="layui-nav-more"></span>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/" url="SystemSetting/SystemResourceModuleList.aspx"><i class="layui-icon" style="font-size: 15px;">&#xe622;</i>&nbsp;系统模块资源</a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/" url="SystemSetting/RoleManager.aspx"><i class="layui-icon" style="font-size: 15px;">&#xe642;</i>&nbsp;角色权限</a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/" url="SystemSetting/StaffRoleManager.aspx"><i class="layui-icon" style="font-size: 15px;">&#xe642;</i>&nbsp;用户(员工)角色组</a>
+                            </dd>
+                        </dl>
+                    </li>
+
+                    <li class="layui-nav-item">
+                        <a class="javascript:;" href="javascript:;">
+                            <i class="layui-icon" style="font-size: 15px;">&#xe63c;</i>
+                            管理日常
+                            <span class="layui-nav-more"></span>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="javscript:void(0)">
+                                    <i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;员工入职审批
+                                </a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;员工离职审批</a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;油料领用审批</a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;设备维修审批</a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;初始事故审阅</a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;未遂事故报告</a>
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+        <div class="layui-body">
+            <div class="site-demo-result">
+                <iframe frameborder="0" id="mainContent" name="mainContent"></iframe>
+            </div>
+        </div>
+        <div class="layui-footer footer footer-demo" style="height: 45px; vertical-align: middle; padding-top: 0px;">
+            <div class="layui-main">
+                @*<p>&copy; 2018 <a href="/">layui.com</a> MIT license</p>
+                <p>
+                    <a href="http://fly.layui.com/case/2018/" target="_blank">案例</a>
+                    <a href="http://fly.layui.com/jie/3147/" target="_blank">支持</a>
+                    <a href="javascript:;" onclick="layer.alert('官方邮箱：xianxin@layui-inc.com <br> 客服 Q Q：572691895 <br> 客服微信：layui-kf', {title:'联系', btn: false, shadeClose: true});">联系</a>
+                    <a href="https://github.com/sentsin/layui/" target="_blank" rel="nofollow">GitHub</a>
+                    <a href="https://gitee.com/sentsin/layui" target="_blank" rel="nofollow">码云</a>
+                    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+                </p>
+                <p class="site-union">
+                    <a href="https://www.upyun.com?from=layui" target="_blank" rel="nofollow" upyun>
+                        <img src="//res.layui.com//images/other/upyun.png?t=1">
+                    </a>
+                    <span>提供 CDN 赞助</span>
+                </p>*@
+            </div>
+        </div>
+
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+</body>
+</html>
+

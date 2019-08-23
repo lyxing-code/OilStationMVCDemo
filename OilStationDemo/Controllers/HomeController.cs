@@ -22,6 +22,12 @@ namespace OilStationDemo.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 登录请求
+        /// </summary>
+        /// <param name="no">用户名</param>
+        /// <param name="pwd">密码</param>
+        /// <returns>json</returns>
         [HttpPost]
         public ActionResult Login(string no , string pwd)
         {
@@ -31,35 +37,19 @@ namespace OilStationDemo.Controllers
            
             if (string.IsNullOrEmpty(no) || string.IsNullOrEmpty(pwd))
             {
-                var result = new
-                {
-                    LoginOk = false,
-                    Message = "账号密码不能为空!",
-                    StaffInfo = staffInfo
-                };
-                return Json(result);
+                return ReturnJosn(false, "账号密码不能为空!", staffInfo);
             }
             else if (staffInfo == null)
             {
-                var result = new
-                {
-                    LoginOk = false,
-                    Message = "密码错误!",
-                    StaffInfo = staffInfo
-                };
-                return Json(result);
+                
+                return ReturnJosn(false, "密码错误!", staffInfo);
             }
             else
             {
-                var result = new
-                {
-                    LoginOk = true,
-                    Message = "登录成功!",
-                    StaffInfo = staffInfo
-                };
-                Session["loginuser"] = staffInfo;
-                return Json(result);
                 
+                Session["loginuser"] = staffInfo;
+                return ReturnJosn(false, "登录成功!", staffInfo);
+
             }
 
         }
@@ -79,8 +69,25 @@ namespace OilStationDemo.Controllers
             return View();
         }
 
-        
 
+        /// <summary>
+        /// 用来获取用户登录信息
+        /// </summary>
+        /// <param name="loginOk">是否成功登录</param>
+        /// <param name="message">提示信息</param>
+        /// <param name="staffInfo">用户信息</param>
+        /// <returns></returns>
+        public ActionResult ReturnJosn(bool loginOk,string message,Models.Staff staffInfo)
+        {
+
+            var result = new
+            {
+                LoginOk = loginOk,
+                Message = message,
+                StaffInfo = staffInfo
+            };
+            return Json(result);
+        }
 
 
     }

@@ -1,0 +1,114 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/layui/css/global.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="~/layui/layui.js"></script>
+    <script type="text/javascript" src="~/layui/layui.all.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.json.js"></script>
+    <script type="text/javascript" src="~/Scripts/Common.js"></script>
+
+    <style type="text/css">
+        .layui-form-label {
+            width: 100px;
+        }
+
+        .layui-form-item .layui-input-inline {
+            float: left;
+            width: 250px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form class="layui-form" runat="server" action="">
+        <div class="layui-form-item"></div>
+        @*<div class="layui-form-item">
+            <label class="layui-form-label">用户名/工号</label>
+            <div class="layui-input-inline">
+                <input type="text" id="txtNo" runat="server" required lay-verify="required" readonly="readonly" autocomplete="off" class="layui-input" />
+            </div>
+        </div>*@
+        <div class="layui-form-item">
+            <label class="layui-form-label">原始密码</label>
+            <div class="layui-input-inline">
+                <input type="password" id="txtOldPassword" runat="server" required lay-verify="required" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新密码</label>
+            <div class="layui-input-inline">
+                <input type="password" runat="server" id="txtNewPassword" required lay-verify="required" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">确定密码</label>
+            <div class="layui-input-inline">
+                <input type="password" runat="server" id="txtConfirmPassword" required lay-verify="required" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="layui-btn" lay-submit="" lay-filter="formInput" data-form-sbm="1524446636424.743" style="pointer-events: auto;">保存</button>
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        layui.use('form', function () {
+            var form = layui.form;
+
+            //监听提交
+            form.on('submit(formInput)', function (data) {
+
+                AjaxRequest();
+                return false;
+            });
+
+        });
+
+        //ajax请求
+        function AjaxRequest() {
+            if ($("#txtConfirmPassword").val().trim() != $("#txtNewPassword").val().trim()) {
+                layer.msg("新密码和确定密码输入不一致!");
+                return false;
+            }
+
+            var index = layer.load(3);//加载请求处理等待
+            $.post("/Update/UpdatePwd", {
+                OldPassword: $("#txtOldPassword").val().trim(),
+                NewPassword: $("#txtNewPassword").val().trim()
+            }, function (d, s) {
+                    if (d.Error == true) {
+                        layer.msg(d.Message, CloseLayerWindown());
+                        //window.location.href = "/Home/Login";
+                    }
+                    else
+                    {
+                        layer.msg(d.Message);
+                    }
+
+            }).done(function () {
+                layer.close(index);
+            });
+        }
+
+    </script>
+</body>
+</html>
+

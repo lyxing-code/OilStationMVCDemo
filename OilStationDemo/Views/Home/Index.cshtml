@@ -24,9 +24,9 @@
             bottom: 0;
             width: 100%;
         }
-    </style>
 
-    <script type="text/javascript" src="~/Scripts/jquery-3.3.1.js"></script>
+    </style>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="~/layui/layui.js"></script>
     <script type="text/javascript" src="~/layui/layui.all.js"></script>
     <script src="~/Scripts/jquery.json.js"></script>
@@ -59,14 +59,17 @@
         function ModifyPassword() {
             layer.open({
                 type: 2,
-                content: "BasicDataMaintenance/ModifyPasswordView.aspx",
+                anim:1,
+                content: "../Update/UpdatePwd",
                 area: ['460px', '330px'],
                 title: "修改密码"
             });
+            
         }
 
         //退出
         function Exit() {
+           
             layer.confirm("确定要退出吗？",
                 {
                     btn: ["确定", "取消"]
@@ -75,9 +78,6 @@
                 }, function () {
                     //取消操作的代码
                 });
-
-
-
         }
 
 /**/</script>
@@ -87,9 +87,9 @@
         <div class="layui-header header header-demo">
             <div class="layui-main">
                 <br />
-                <marquee behavior="scroll" direction="right" scrolldelay="1" scrollamount="2" onmouseover="this.stop()" onmouseout="this.start()" style="height: auto; width: 80%;">
+                <marquee behavior="scroll" direction="right" scrolldelay="1" scrollamount="2" onmouseover="this.stop()" onmouseout="this.start()" style="margin-top:4px;height: auto; width: 70%;">
                     <a style="color:white;" href="javascript:void(0)">
-                        <i class="layui-icon" style="font-size: 15px; color: #1E9FFF;">&#xe68e;</i>    欢迎您 &nbsp;@ViewBag.Name
+                        <i class="layui-icon" style="font-size: 15px; color: #1E9FFF;">&#xe68e;</i>    欢迎您 @ViewBag.Name
                     </a>
                 </marquee>
 

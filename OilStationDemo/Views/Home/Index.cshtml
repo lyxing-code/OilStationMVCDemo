@@ -24,7 +24,6 @@
             bottom: 0;
             width: 100%;
         }
-
     </style>
     <script src="~/Scripts/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="~/layui/layui.js"></script>
@@ -53,32 +52,70 @@
                     $("#mainContent").attr("src", url);
                 }
             });
+            
+            //点击加载子菜单事件
+            $(".layui-nav-item a").click(function () {
+                //alert($(this).attr("parentmeunid"));
+                var thisindex = $(this).parent();
+                LoadChildMeun($(this).attr("parentmeunid"),thisindex);
+            });
+
+           
+
         });
 
         //修改密码
         function ModifyPassword() {
             layer.open({
                 type: 2,
-                anim:1,
+                anim: 1,
                 content: "../Update/UpdatePwd",
                 area: ['460px', '330px'],
                 title: "修改密码"
             });
-            
+
         }
 
         //退出
         function Exit() {
-           
+
             layer.confirm("确定要退出吗？",
                 {
                     btn: ["确定", "取消"]
                 }, function (index, layero) {
-                        window.location.href = "/Home/Login";
+                    window.location.href = "/Home/Login";
                 }, function () {
                     //取消操作的代码
                 });
         }
+
+        //子菜单加载
+        function LoadChildMeun(parentmeun, thisindex) {
+           // $(thisindex).find("div").append("<dl>1</dl>");
+             $.post("/Home/ChildMenu",{ parentmeunid: parentmeun},
+                    function (d,s)
+                    {
+                        $(thisindex).find("div").html("");
+                        $(d).each(function (index, item) {
+                            var str = "<dl><dd><a href='javscript:void(0)' url='" + (item.Url == null ? "" : item.Url) + "'><i class='layui-icon' style='font-size:15px;'>&#xe"+Random()+";</i>&nbsp;" + item.Name + "</a></dd></dl>"
+                            //alert(str);
+                            $(thisindex).find("div").append(str);
+                          
+                        });
+                        
+                    }
+                );
+        }
+
+        function Random() {
+            var str = "";
+            for (var i = 0; i < 3; i++) {
+                var num = Math.random() * 6;
+                str += parseInt(num);
+            }
+            return str;
+        }
+
 
 /**/</script>
 </head>
@@ -107,167 +144,27 @@
                 </ul>
             </div>
         </div>
+
         <div class="layui-side layui-bg-black">
             <div class="layui-side-scroll">
 
-                <ul class="layui-nav layui-nav-tree site-demo-nav">
+                <ul class="layui-nav layui-nav-tree site-demo-nav" id="opmeun">
                     <!--layui-nav-itemed-->
-                    <li class="layui-nav-item">
-                        <a class="javascript:;" href="javascript:;">
-                            <i class="layui-icon" style="font-size: 15px;">&#xe63c;</i>
-                           
-                            <span class="layui-nav-more"></span>
-                        </a>
+                    @for (int i = 0; i < ViewData.Model.Count; i++)
+                    {
+                        <li class="layui-nav-item">
+                            <a class="javascript:;" href="javascript:;"  parentmeunid="@ViewData.Model[i].Id">
+                                <i class="layui-icon" style="font-size: 15px;">&#xe63c;</i>
+                                 @ViewData.Model[i].Name
+                                <span class="layui-nav-more"></span>
+                            </a>
+                           <div class="layui-nav-child">
 
-                       
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="javscript:void(0)" url="<%=itemp.Url%>">
-                                    <i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;<%=itemp.Name %>
-                                </a>
-                            </dd>
-                        </dl>
-                        
-                    </li>
-                  
-                    <li class="layui-nav-item layui-nav-itemed">
-                        <a class="javascript:;" href="javascript:;">
-                            <i class="layui-icon" style="font-size: 15px;">&#xe63c;</i>
-                            加油站日常
-                            <span class="layui-nav-more"></span>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="javscript:void(0)" url="OilStationDaily/EntryManager.aspx">
-                                    <i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;员工入职申请
-                                </a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;员工离职申请</a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;油料领用申请</a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;设备维修申请</a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;初始事故报告</a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;未遂事故报告</a>
-                            </dd>
-                        </dl>
-                    </li>
+                           </div>
+                        </li>
+                    }
 
-                    <li class="layui-nav-item">
-                        <a class="javascript:;" href="javascript:;">
-                            <i class="layui-icon" style="font-size: 15px;">&#xe631;</i>
-                            基础信息维护
-                            <span class="layui-nav-more"></span>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/" url="BasicDataMaintenance/OrganizationStructureManger.aspx">
-                                    <i class="layui-icon" style="font-size: 10px;">&#xe613;</i>&nbsp;组织机构管理
-                                </a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/" url="BasicDataMaintenance/JobManager.aspx">
-                                    <i class="layui-icon" style="font-size: 15px;">&#xe600;</i>&nbsp;职位管理
-                                </a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/" url="BasicDataMaintenance/StaffManager.aspx">
-                                    <i class="layui-icon" style="font-size: 10px;">&#xe612;</i>&nbsp;员工基础信息管理
-                                </a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/" url="BasicDataMaintenance/HSEGroupManager.aspx">
-                                    <i class="layui-icon" style="font-size: 15px;">&#xe756;</i>&nbsp;HSE组人员设置
-                                </a>
-                            </dd>
-                        </dl>
-                    </li>
-
-                    <li class="layui-nav-item">
-                        <a class="javascript:;" href="javascript:;">
-                            <i class="layui-icon" style="font-size: 15px;">&#xe620;</i>
-                            系统设置
-                            <span class="layui-nav-more"></span>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/" url="SystemSetting/SystemResourceModuleList.aspx"><i class="layui-icon" style="font-size: 15px;">&#xe622;</i>&nbsp;系统模块资源</a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/" url="SystemSetting/RoleManager.aspx"><i class="layui-icon" style="font-size: 15px;">&#xe642;</i>&nbsp;角色权限</a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/" url="SystemSetting/StaffRoleManager.aspx"><i class="layui-icon" style="font-size: 15px;">&#xe642;</i>&nbsp;用户(员工)角色组</a>
-                            </dd>
-                        </dl>
-                    </li>
-
-                    <li class="layui-nav-item">
-                        <a class="javascript:;" href="javascript:;">
-                            <i class="layui-icon" style="font-size: 15px;">&#xe63c;</i>
-                            管理日常
-                            <span class="layui-nav-more"></span>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="javscript:void(0)">
-                                    <i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;员工入职审批
-                                </a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;员工离职审批</a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;油料领用审批</a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;设备维修审批</a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;初始事故审阅</a>
-                            </dd>
-                        </dl>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a href="/demo/"><i class="layui-icon" style="font-size: 15px;">&#xe60a;</i>&nbsp;未遂事故报告</a>
-                            </dd>
-                        </dl>
-                    </li>
+                   
                 </ul>
 
             </div>
@@ -280,7 +177,7 @@
         </div>
         <div class="layui-footer footer footer-demo" style="height: 45px; vertical-align: middle; padding-top: 0px;">
             <div class="layui-main">
-                @*<p>&copy; 2018 <a href="/">layui.com</a> MIT license</p>
+                <p>&copy; 2018 <a href="/">layui.com</a> MIT license</p>
                 <p>
                     <a href="http://fly.layui.com/case/2018/" target="_blank">案例</a>
                     <a href="http://fly.layui.com/jie/3147/" target="_blank">支持</a>
@@ -294,7 +191,7 @@
                         <img src="//res.layui.com//images/other/upyun.png?t=1">
                     </a>
                     <span>提供 CDN 赞助</span>
-                </p>*@
+                </p>
             </div>
         </div>
 

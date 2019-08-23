@@ -9,12 +9,14 @@ namespace OilStationDemo.Controllers
     public class HomeController : Controller
     {
         Models.OSMSEntities DB = new Models.OSMSEntities();
-
+      
         public ActionResult Index()
         {
             Models.Staff staffinfo = (Models.Staff)Session["loginuser"];
             ViewBag.Name = staffinfo.Name;
+            ParentMenu();
             return View();
+            
         }
 
         public ActionResult Login()
@@ -89,6 +91,27 @@ namespace OilStationDemo.Controllers
             return Json(result);
         }
 
+        /// <summary>
+        /// 加载父级菜单
+        /// </summary>
+        public void ParentMenu()
+        {
+            Models.Staff staffinfo = (Models.Staff)Session["loginuser"];
+            List<Models.v_staffmune> menu = DB.v_staffmune.Where(o => o.staffid.Equals(staffinfo.Id) && o.Type == 0 && o.ParentId == null ).ToList();
+            ViewData.Model = menu;
+        }
+
+        /// <summary>
+        /// 加载子级菜单
+        /// </summary>
+        /// <param name="parentmeunid">与parentid对应的父子级关系id</param>
+        /// <returns></returns>
+        public ActionResult ChildMenu(string parentmeunid)
+        {
+            Models.Staff staffinfo = (Models.Staff)Session["loginuser"];
+            List<Models.v_staffmune> menu = DB.v_staffmune.Where(o => o.staffid.Equals(staffinfo.Id) && o.ParentId.ToString().Equals(parentmeunid)).ToList();
+            return Json(menu);
+        }
 
     }
 }

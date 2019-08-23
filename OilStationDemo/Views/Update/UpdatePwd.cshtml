@@ -75,7 +75,6 @@
 
             //监听提交
             form.on('submit(formInput)', function (data) {
-
                 AjaxRequest();
                 return false;
             });
@@ -94,7 +93,8 @@
                 OldPassword: $("#txtOldPassword").val().trim(),
                 NewPassword: $("#txtNewPassword").val().trim()
             }, function (d, s) {
-                    if (d.Error == true) {
+                    if (d.Error == true)
+                    {
                         layer.msg(d.Message, CloseLayerWindown());
                         //window.location.href = "/Home/Login";
                     }

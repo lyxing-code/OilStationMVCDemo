@@ -43,7 +43,6 @@
                 ChangeFormHegight();
             });
 
-
             $("#btnLogin").click(function () {
                 var index = layer.load(3);//加载请求处理等待
                 //layer.msg("不开心");
@@ -59,17 +58,17 @@
                     data: { no: $("#txtNo").val(), pwd: $("#txtPwd").val() },
                     dataType: "json",
                     success: function (d, s) {
-                        if (s == "success" || d != null) {
+                        if (s == "success" || d != null)
+                        {
                             if (d.Message == "登录成功!") {
                                 window.location.href = "/Home/Index";
-                            } else {
+                            }
+                            else
+                            {
                                 layer.alert(d.Message);
                             }
-
                         }
-
                     }
-
                 }).done(function () {
                     layer.close(index);
                 });

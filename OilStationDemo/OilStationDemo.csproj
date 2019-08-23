@@ -194,6 +194,9 @@
     <Compile Include="Models\SystemResourceModule.cs">
       <DependentUpon>OMOSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\v_staffmune.cs">
+      <DependentUpon>OMOSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -41,6 +41,7 @@ namespace OilStationDemo.Models
         public virtual DbSet<ProcessStepRecord> ProcessStepRecord { get; set; }
         public virtual DbSet<RoleResourceModule> RoleResourceModule { get; set; }
         public virtual DbSet<StaffRole> StaffRole { get; set; }
+        public virtual DbSet<v_staffmune> v_staffmune { get; set; }
     
         public virtual int P_Pager(ObjectParameter recordTotal, string viewName, string fieldName, string keyName, Nullable<int> pageSize, Nullable<int> pageNo, string orderString, string whereString)
         {

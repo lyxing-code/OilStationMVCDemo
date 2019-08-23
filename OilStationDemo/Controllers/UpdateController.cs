@@ -57,8 +57,6 @@ namespace OilStationDemo.Controllers
                     return Json(json);
                 }
               
-               
-
             }
 
         }

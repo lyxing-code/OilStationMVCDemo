@@ -45,13 +45,6 @@
                 }
             });
 
-            //打开页面
-            $(".layui-nav-child a").click(function () {
-                var url = $(this).attr("url");
-                if (url != null && url != undefined && url.trim() != "") {
-                    $("#mainContent").attr("src", url);
-                }
-            });
             
             //点击加载子菜单事件
             $(".layui-nav-item a").click(function () {
@@ -59,8 +52,6 @@
                 var thisindex = $(this).parent();
                 LoadChildMeun($(this).attr("parentmeunid"),thisindex);
             });
-
-           
 
         });
 
@@ -88,7 +79,7 @@
                     //取消操作的代码
                 });
         }
-
+        
         //子菜单加载
         function LoadChildMeun(parentmeun, thisindex) {
            // $(thisindex).find("div").append("<dl>1</dl>");
@@ -97,16 +88,16 @@
                     {
                         $(thisindex).find("div").html("");
                         $(d).each(function (index, item) {
-                            var str = "<dl><dd><a href='javscript:void(0)' url='" + (item.Url == null ? "" : item.Url) + "'><i class='layui-icon' style='font-size:15px;'>&#xe"+Random()+";</i>&nbsp;" + item.Name + "</a></dd></dl>"
+                            var str = "<dl><dd><a href='javascript:LoadMain("+"\""+(item.Url).toString()+"\""+")'  url='" + (item.Url == null ? "" : item.Url) + "'><i class='layui-icon' style='font-size:15px;'>&#xe" + Random() + ";</i>&nbsp;" + item.Name + "</a></dd></dl>";
                             //alert(str);
                             $(thisindex).find("div").append(str);
-                          
                         });
                         
                     }
                 );
         }
 
+        //随机数
         function Random() {
             var str = "";
             for (var i = 0; i < 3; i++) {
@@ -116,8 +107,9 @@
             return str;
         }
 
-
+        
 /**/</script>
+    <script src="~/Scripts/LoadMain.js"></script>
 </head>
 <body>
     <div class="layui-layout layui-layout-admin">
@@ -158,13 +150,11 @@
                                  @ViewData.Model[i].Name
                                 <span class="layui-nav-more"></span>
                             </a>
-                           <div class="layui-nav-child">
+                           <div class="layui-nav-child" id="childmeun">
 
                            </div>
                         </li>
                     }
-
-                   
                 </ul>
 
             </div>
@@ -172,7 +162,7 @@
 
         <div class="layui-body">
             <div class="site-demo-result">
-                <iframe frameborder="0" id="mainContent" name="mainContent"></iframe>
+                <iframe frameborder="0" src="" id="mainContent" name="mainContent"></iframe>
             </div>
         </div>
         <div class="layui-footer footer footer-demo" style="height: 45px; vertical-align: middle; padding-top: 0px;">

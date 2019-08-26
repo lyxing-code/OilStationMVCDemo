@@ -1,0 +1,126 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>职位管理</title>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/layui/css/global.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/Common.js"></script>
+    <script src="~/layui/layui.js"></script>
+    <script src="~/layui/layui.all.js"></script>
+</head>
+<body style="min-width: 680px; width: auto;">
+    <div class="layui-layer-title layui-bg-green" style="padding-left: 5px;">
+        <label style="color: white;">基础信息维护<i class="layui-icon">&#xe65b;</i>职位管理</label>
+        <a class="layui-btn layui-btn-primary layui-btn-sm" href="javascript:AddJobinfo()">新增<i class="layui-icon">&#xe654;</i></a>
+    </div>
+
+    <form class="layui-form">
+        <div class="layui-form-item" style="padding: 0px; padding-top: 2px; padding-left: 0px;">
+            <label class="layui-form-label">职位名称</label>
+            <div class="layui-input-inline">
+                <input type="text" id="txtName" name="Name" autocomplete="off" class="layui-input" />
+            </div>
+            <label class="layui-form-label">职位代码</label>
+            <div class="layui-input-inline">
+                <input type="text" id="txtCode" name="Code" autocomplete="off" class="layui-input" />
+            </div>
+            <a class="layui-btn layui-btn-primary" href="javascript:void(0)" id="btnSearch"><i class="layui-icon">&#xe615;</i></a>
+        </div>
+    </form>
+    <table class="layui-hide" id="test"></table>
+    <script type="text/html" id="doTpl">
+        <!--	这里的	checked	的状态只是演示	-->
+        <input type="button" value="修改" onclick="UpdateJob('{{d.Id}}');" class="layui-btn	layui-btn-sm layui-btn-sm">
+        <input type="button" value="删除" onclick="DeleteJob('{{d.Id}}');" class="layui-btn	layui-btn-sm layui-btn-danger">
+    </script>
+    <script>
+        //初次加载数据操作
+        $().ready(function () {
+            layui.use('table', function () {
+                var table = layui.table;
+                var tableIns = table.render({
+                    elem: '#test',
+                    url: '/JobManger/ShowJobInfo'
+                    , cols: [[
+                        { field: 'Name', width: 280, title: '职位名称', sort: true },
+                        { field: 'Code', width: 280, title: '职位代码', sort: true },
+                        { field: 'Do', title: '操作', width: 200, templet: '#doTpl', unresize: true }
+                    ]]
+                    , page: true //表示分页表格
+                });
+
+                $("#btnSearch").click(function () {
+                    tableIns.reload({
+                        page: {
+                            curr: 1 //重新从第 1 页开始
+                        },
+                        where: {//指定查询条件 根据查询的表单控件分别指定即可
+                            jobName: $("#txtName").val(),
+                            jobCode: $("#txtCode").val()
+                        }
+                    });
+
+                });
+            });
+        });
+
+       //添加操作
+        function AddJobinfo() {
+            layer.open({
+                type: 2,
+                content: "/JobManger/AddJobInfo",
+                area: ['460px', '230px'],
+                title: "添加职位"
+            });
+
+        }
+
+        //修改操作
+        function UpdateJob(id) {
+            //alert(id);
+            layer.open({
+                type: 2,
+                content: "/JobManger/UpdateJobInfo?gid="+id,
+                area: ['460px', '230px'],
+                title: "职位修改"
+            });
+        }
+
+        //删除操作
+        function DeleteJob(id) {
+            layer.confirm("确定要删除吗？",
+                {
+                    btn: ["确定", "取消"]
+                }, function (index, layero) {
+                    var index = layer.load(3);
+                    $.post("/JobManger/DeleteById", { gid: id }, function (d, s) {
+                        
+                        if (d == "T") {
+                            layer.msg("删除操作成功!");
+                            //重新刷新父界面中的表格数据 test为父窗口中表格的id号
+                            layui.table.reload('test');
+
+                        } else {
+                            layer.msg("删除操作失败!");
+                        }
+                    }).done(function () {
+                        layer.close(index);//请求完毕 关闭
+                    });
+                }, function () {
+                    //取消操作的代码
+                    //do nothing
+                });
+
+
+        }
+
+
+    </script>
+</body>
+</html>

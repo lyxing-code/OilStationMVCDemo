@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="OSMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="OSMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Approver">
           <Key>
             <PropertyRef Name="Id" />
@@ -280,6 +280,26 @@
           <Property Name="OrderNo" Type="int" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6002: 表/视图“OSMS.dbo.v_Organization”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_Organization">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Leve" />
+            <PropertyRef Name="IsDel" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Leve" Type="int" Nullable="false" />
+          <Property Name="ParentId" Type="uniqueidentifier" />
+          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="ParentName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“OSMS.dbo.v_staffmune”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="v_staffmune">
           <Key>
@@ -372,6 +392,19 @@
     [StaffRole].[RoleId] AS [RoleId]
     FROM [dbo].[StaffRole] AS [StaffRole]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="v_Organization" EntityType="Self.v_Organization" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_Organization].[Id] AS [Id], 
+    [v_Organization].[Code] AS [Code], 
+    [v_Organization].[Name] AS [Name], 
+    [v_Organization].[Leve] AS [Leve], 
+    [v_Organization].[ParentId] AS [ParentId], 
+    [v_Organization].[CreateTime] AS [CreateTime], 
+    [v_Organization].[UpdateTime] AS [UpdateTime], 
+    [v_Organization].[IsDel] AS [IsDel], 
+    [v_Organization].[ParentName] AS [ParentName]
+    FROM [dbo].[v_Organization] AS [v_Organization]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="v_staffmune" EntityType="Self.v_staffmune" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [v_staffmune].[Id] AS [Id], 
@@ -393,7 +426,8 @@
             <End Role="OilMaterialOrderDetail" EntitySet="OilMaterialOrderDetail" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="OSMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -669,6 +703,40 @@
           <Property Name="StaffId" Type="Guid" Nullable="false" />
           <Property Name="RoleId" Type="Guid" Nullable="false" />
         </EntityType>
+        <EntityType Name="v_Organization">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Leve" />
+            <PropertyRef Name="IsDel" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Leve" Type="Int32" Nullable="false" />
+          <Property Name="ParentId" Type="Guid" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="ParentName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="v_staffmune">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="Type" />
+            <PropertyRef Name="staffid" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Url" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="ParentId" Type="Guid" />
+          <Property Name="OrderNo" Type="Int32" />
+          <Property Name="staffid" Type="Guid" Nullable="false" />
+        </EntityType>
         <Association Name="FK__Approver__Proces__30F848ED">
           <End Role="ProcessItem" Type="Self.ProcessItem" Multiplicity="0..1" />
           <End Role="Approver" Type="Self.Approver" Multiplicity="*" />
@@ -708,6 +776,8 @@
           <EntitySet Name="ProcessStepRecord" EntityType="Self.ProcessStepRecord" />
           <EntitySet Name="RoleResourceModule" EntityType="Self.RoleResourceModule" />
           <EntitySet Name="StaffRole" EntityType="Self.StaffRole" />
+          <EntitySet Name="v_Organization" EntityType="Self.v_Organization" />
+          <EntitySet Name="v_staffmune" EntityType="Self.v_staffmune" />
           <AssociationSet Name="FK__Approver__Proces__30F848ED" Association="Self.FK__Approver__Proces__30F848ED">
             <End Role="ProcessItem" EntitySet="ProcessItem" />
             <End Role="Approver" EntitySet="Approver" />
@@ -726,24 +796,7 @@
             <Parameter Name="orderString" Mode="In" Type="String" />
             <Parameter Name="whereString" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="v_staffmune" EntityType="OSMSModel.v_staffmune" />
         </EntityContainer>
-        <EntityType Name="v_staffmune">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="Code" />
-            <PropertyRef Name="Type" />
-            <PropertyRef Name="staffid" />
-          </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Code" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Url" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
-          <Property Name="ParentId" Type="Guid" />
-          <Property Name="OrderNo" Type="Int32" />
-          <Property Name="staffid" Type="Guid" Nullable="false" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1021,21 +1074,36 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="P_Pager" FunctionName="OSMSModel.Store.P_Pager" />
-          <EntitySetMapping Name="v_staffmune">
-            <EntityTypeMapping TypeName="OSMSModel.v_staffmune">
-              <MappingFragment StoreEntitySet="v_staffmune">
-                <ScalarProperty Name="staffid" ColumnName="staffid" />
-                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
-                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Url" ColumnName="Url" />
+          <EntitySetMapping Name="v_Organization">
+            <EntityTypeMapping TypeName="OSMSModel.v_Organization">
+              <MappingFragment StoreEntitySet="v_Organization">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Leve" ColumnName="Leve" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="ParentName" ColumnName="ParentName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="v_staffmune">
+            <EntityTypeMapping TypeName="OSMSModel.v_staffmune">
+              <MappingFragment StoreEntitySet="v_staffmune">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+                <ScalarProperty Name="staffid" ColumnName="staffid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="P_Pager" FunctionName="OSMSModel.Store.P_Pager" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

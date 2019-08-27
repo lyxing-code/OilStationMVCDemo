@@ -1,0 +1,128 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>组织结构管理</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <script src="~/layui/layui.all.js"></script>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-size: 12px;
+        }
+
+        div {
+            -moz-box-sizing: border-box; /*Firefox3.5+*/
+            -webkit-box-sizing: border-box; /*Safari3.2+*/
+            -o-box-sizing: border-box; /*Opera9.6*/
+            -ms-box-sizing: border-box; /*IE8*/
+            box-sizing: border-box; /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
+        }
+
+        .dHead {
+            height: 85px;
+            width: 100%;
+            position: fixed;
+            z-index: 5;
+            top: 0;
+            overflow-x: auto;
+            padding: 10px;
+        }
+
+        .dBody {
+            width: 100%;
+            overflow: auto;
+            top: 90px;
+            position: absolute;
+            z-index: 10;
+            bottom: 5px;
+        }
+
+        .layui-btn-xstree {
+            height: 35px;
+            line-height: 35px;
+            padding: 0px 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="height: 100%">
+        <div class="layui-layer-title layui-bg-green">
+            <label style="color: white;"> 基础信息维护<i class="layui-icon"> &#xe65b;</i> 组织机构管理</label>
+            <a class="layui-btn layui-btn-primary layui-btn-sm" onclick="AddChildOrg()" lay-filter="addChild"> 添加子机构</a>
+            <a class="layui-btn layui-btn-primary layui-btn-sm" lay-filter="update" onclick="getCheckData();" id="btnUpdate"> 修改机构</a>
+            <a class="layui-btn layui-btn-primary layui-btn-sm" lay-filter="delete"> 删除机构及其子机构</a>
+        </div>
+        <div class="dBody">
+            <table class="layui-hidden" id="treeTable" lay-filter="treeTable"></table>
+        </div>
+    </div>
+    <script>
+
+        var editObj = null, ptable = null, treeGrid = null, tableId = 'treeTable', layer = null;
+        //导入插件的资源配置文件
+        layui.config({
+            base: '/design/extend/'			//步骤2中引入的资源文件夹的路径
+        }).extend({
+            treeGrid: 'treeGrid'			//引入treeGrid扩展
+        }).use(['jquery', 'treeGrid', 'layer'], function () {
+            var $ = layui.jquery;
+            treeGrid = layui.treeGrid;//很重要
+            layer = layui.layer;
+            ptable = treeGrid.render({
+                id: tableId,			//视图中table标签的id
+                elem: '#' + tableId,
+                url: '/OrganizationManger/GetOrganizeTreeData',			  //后台提供树形json数据的控制器方法
+                treeId: 'Id',//树形id字段名称			  //后台数据的主键
+                idField: 'Id',//树形id字段名称			  //树形控件的主键
+                treeUpId: 'ParentId', //树形父id字段名称
+                treeShowName: 'Name',//以树形式显示的字段
+                cellMinWidth: 100,
+                height: '100%',
+                isFilter: false,
+                iconOpen: true,//是否显示图标【默认显示】
+                isOpenDefault: false,//节点默认是展开还是折叠【默认展开】
+                loading: true,
+                method: 'get',
+                isPage: false,
+                cols: [[
+                    { type: 'radio' },			//单选框列
+                    { field: 'Name', width: 300, title: '组织机构名称',calss:" text-center" }
+                    , { field: 'Code', width: 300, title: '代码' }
+                    , {
+                        field: 'Leve', title: '区域级别', templet: function (da) {							//将区域等级数字转换为对应级别的汉字
+                            if (da.Leve == "0") {
+                                return "总部";
+                            }
+                            else if (da.Leve == "1")
+                                return "大区";
+                            else if (da.Leve == "2")
+                                return "区域";
+                            else if (da.Leve == "3")
+                                return "油站";
+                        }
+                    }
+                ]]
+
+            });
+        });
+
+
+
+
+
+    </script>
+</body>
+</html>

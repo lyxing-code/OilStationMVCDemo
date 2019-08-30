@@ -95,6 +95,8 @@
                 success: function (d, s) {
                     if (d=="T") {
                         layer.msg("添加成功!", CloseLayerWindown());
+                        parent.treeGrid.query(parent.tableId);//重新加载树控件数据
+                        //parent.treeGrid.reload(parent.tableId);
                     }
                 }
             }).done(function () {

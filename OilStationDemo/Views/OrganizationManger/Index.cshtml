@@ -190,7 +190,7 @@
                             layer.msg("删除操作成功!");
                             //重新刷新父界面中的表格数据 test为父窗口中表格的id号
                             layui.table.reload('test');
-
+                            treeGrid.query(tableId);//重新加载
                         } else {
                             layer.msg("删除操作失败!");
                         }

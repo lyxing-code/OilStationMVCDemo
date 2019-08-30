@@ -96,6 +96,7 @@
                 success: function (d, s) {
                     if (d=="T") {
                         layer.msg("修改成功!", CloseLayerWindown());
+                        parent.treeGrid.query(parent.tableId);
                     } else {
                          layer.msg("修改失败!", CloseLayerWindown());
                     }

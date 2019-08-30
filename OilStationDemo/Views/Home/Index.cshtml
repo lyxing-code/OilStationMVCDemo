@@ -57,6 +57,7 @@
 
         //修改密码
         function ModifyPassword() {
+            var index = layer.load(3);
             layer.open({
                 type: 2,
                 anim: 1,
@@ -64,7 +65,7 @@
                 area: ['460px', '330px'],
                 title: "修改密码"
             });
-
+             layer.close(index);//请求完毕 关闭
         }
 
         //退出

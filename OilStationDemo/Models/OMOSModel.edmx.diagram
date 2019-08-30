@@ -19,10 +19,10 @@
         <EntityTypeShape EntityType="OSMSModel.ProcessStepRecord" Width="1.5" PointX="9.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="OSMSModel.RoleResourceModule" Width="1.5" PointX="9.75" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="OSMSModel.StaffRole" Width="1.5" PointX="11.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OSMSModel.v_Organization" Width="1.5" PointX="11.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="OSMSModel.v_staffmune" Width="1.5" PointX="11.75" PointY="7.75" IsExpanded="true" />
         <AssociationConnector Association="OSMSModel.FK__Approver__Proces__30F848ED" ManuallyRouted="false" />
         <AssociationConnector Association="OSMSModel.FK__OilMateri__Order__31EC6D26" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="OSMSModel.v_Organization" Width="1.5" PointX="10.375" PointY="11.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

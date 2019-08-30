@@ -23,5 +23,6 @@ namespace OilStationDemo.Models
         public Nullable<System.DateTime> UpdateTime { get; set; }
         public bool IsDel { get; set; }
         public string ParentName { get; set; }
+        public string ParentCode { get; set; }
     }
 }

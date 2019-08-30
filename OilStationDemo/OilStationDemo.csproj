@@ -496,6 +496,8 @@
     <Content Include="Views\JobManger\AddJobInfo.cshtml" />
     <Content Include="Views\JobManger\UpdateJobInfo.cshtml" />
     <Content Include="Views\OrganizationManger\Index.cshtml" />
+    <Content Include="Views\OrganizationManger\AppendOrganize.cshtml" />
+    <Content Include="Views\OrganizationManger\UpdateOrganize.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

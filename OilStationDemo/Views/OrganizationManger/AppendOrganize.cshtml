@@ -1,0 +1,113 @@
+﻿@model OilStationDemo.Models.v_Organization
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>组织结构添加</title>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/layui/layui.all.js"></script>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/Scripts/Common.js"></script>
+    <style type="text/css">
+        .layui-form-label {
+            width: 100px;
+        }
+
+        .layui-form-item .layui-input-inline {
+            float: left;
+            width: 250px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form class="layui-form" id="addform">
+        <input type="hidden" name="Leve" value="@Model.Leve" />
+        <div class="layui-form-item"></div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上级机构</label>
+            <div class="layui-input-inline">
+                <input type="text" name="ParentName" value="@Model.ParentName" id="txtParentName" autocomplete="off" class="layui-input" readonly="readonly">
+                <input type="hidden" name="ParentId" value="@Model.Id" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上级机构代码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="ParentCode" id="txtParentCode" value="@Model.ParentCode" autocomplete="off" class="layui-input" readonly="readonly">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">机构级别</label>
+            <div class="layui-input-inline">
+                <input type="text" name="Leve" id="txtLeveStr" value="@ViewBag.Leve" autocomplete="off" class="layui-input" readonly="readonly">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">机构名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="Name" id="txtName" required lay-verify="required" placeholder="请输入组织机构名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">代码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="Code" id="txtCode" required lay-verify="required" placeholder="请输入组织机构代码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="formInput" data-form-sbm="1524446636424.743" style="pointer-events: auto;">保存</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+    <script>
+
+         layui.use('form', function () {
+            var form = layui.form;
+            //监听提交
+            form.on('submit(formInput)', function (data) {
+                AjaxRequest();
+                return false;
+            })
+
+        });
+
+   
+        function AjaxRequest() {
+            //请求时 前台等待
+            //alert($("#addform").serialize());
+            var index = layer.load(3);
+            $.ajax({
+                type:"post",
+                url: "/OrganizationManger/AppendOrganize",
+                data: $("#addform").serialize(),
+                dataType: "text",
+                success: function (d, s) {
+                    if (d=="T") {
+                        layer.msg("添加成功!", CloseLayerWindown());
+                    }
+                }
+            }).done(function () {
+                layer.close(index);//请求完毕 关闭
+            });
+            
+
+           
+        }
+
+        
+
+    </script>
+</body>
+</html>
+

@@ -11,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>组织结构管理</title>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
     <script src="~/layui/layui.all.js"></script>
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <style>
@@ -62,8 +63,8 @@
         <div class="layui-layer-title layui-bg-green">
             <label style="color: white;"> 基础信息维护<i class="layui-icon"> &#xe65b;</i> 组织机构管理</label>
             <a class="layui-btn layui-btn-primary layui-btn-sm" onclick="AddChildOrg()" lay-filter="addChild"> 添加子机构</a>
-            <a class="layui-btn layui-btn-primary layui-btn-sm" lay-filter="update" onclick="getCheckData();" id="btnUpdate"> 修改机构</a>
-            <a class="layui-btn layui-btn-primary layui-btn-sm" lay-filter="delete"> 删除机构及其子机构</a>
+            <a class="layui-btn layui-btn-primary layui-btn-sm" lay-filter="update" onclick="UpdateData();" id="btnUpdate"> 修改机构</a>
+            <a class="layui-btn layui-btn-primary layui-btn-sm" lay-filter="delete" onclick="DeleteDate();"> 删除机构及其子机构</a>
         </div>
         <div class="dBody">
             <table class="layui-hidden" id="treeTable" lay-filter="treeTable"></table>
@@ -99,10 +100,10 @@
                 isPage: false,
                 cols: [[
                     { type: 'radio' },			//单选框列
-                    { field: 'Name', width: 300, title: '组织机构名称',calss:" text-center" }
-                    , { field: 'Code', width: 300, title: '代码' }
+                    { field: 'Name', width: 300, title: '组织机构名称', align: "center" }
+                    , { field: 'Code', width: 300, title: '代码', align: "center" }
                     , {
-                        field: 'Leve', title: '区域级别', templet: function (da) {							//将区域等级数字转换为对应级别的汉字
+                        field: 'Leve', title: '区域级别', align: "center", templet: function (da) {							//将区域等级数字转换为对应级别的汉字
                             if (da.Leve == "0") {
                                 return "总部";
                             }
@@ -119,8 +120,88 @@
             });
         });
 
+        //添加子节点
+        function AddChildOrg() {
+            //获取选择的树节点
+            var data = treeGrid.radioStatus(tableId); 
+            //判断是否选中
+            if (JSON.stringify(data) == "{}") {
+                layer.msg("没有选择父级组织结构不能增加子级组织");
+            }
+            else {
+                var index = layer.load(2);
+                layer.open({
+                    type: 2,
+                    content: "/OrganizationManger/AppendOrganize?gid=" + data.Id,
+                    area: ['460px', '420px'],
+                    title: "添加组织结构"
+                });
+               layer.close(index);//请求完毕 关闭
+            }
+        }
+
+    //修改当前节点的信息
+    function UpdateData() {
+        //获取选择的树节点
+            var data = treeGrid.radioStatus(tableId); 
+            //判断是否选中
+            if (JSON.stringify(data) == "{}") {
+                layer.msg("没有选择父级组织结构不能增加子级组织");
+            }
+            else {
+                var index = layer.load(2);
+                layer.open({
+                    type: 2,
+                    content: "/OrganizationManger/UpdateOrganize?gid=" + data.Id,
+                    area: ['460px', '420px'],
+                    title: "修改组织结构"
+                });
+               layer.close(index);//请求完毕 关闭
+            }
+    } 
 
 
+    function DeleteDate() {
+
+         var data = treeGrid.radioStatus(tableId); 
+            //判断是否选中
+            if (JSON.stringify(data) == "{}") {
+                layer.msg("没有选择父级组织结构不能增加子级组织");
+            }
+            else {
+                var index = layer.load(2);
+                DelAction(data.Id);
+               layer.close(index);//请求完毕 关闭
+            }
+
+         
+
+    }
+
+    function DelAction(id) {
+        layer.confirm("确定要删除吗？",
+                {
+                    btn: ["确定", "取消"]
+                }, function (index, layero) {
+                    var index = layer.load(3);
+                    $.post("/OrganizationManger/DeleteById", { gid: id }, function (d, s) {
+                        
+                        if (d == "T") {
+                            layer.msg("删除操作成功!");
+                            //重新刷新父界面中的表格数据 test为父窗口中表格的id号
+                            layui.table.reload('test');
+
+                        } else {
+                            layer.msg("删除操作失败!");
+                        }
+                    }).done(function () {
+                        layer.close(index);//请求完毕 关闭
+                    });
+                }, function () {
+                    //取消操作的代码
+                    //do nothing
+                });
+    }
 
 
     </script>

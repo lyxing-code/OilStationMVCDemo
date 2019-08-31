@@ -1,0 +1,193 @@
+﻿@model OilStationDemo.Models.v_staffinfo 
+@{
+    Layout = null;
+}
+
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link href="/layui/css/layui.css" rel="stylesheet" />
+    <link href="/layui/css/global.css" rel="stylesheet" />
+    <script type="text/javascript" src="/Scripts/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/layui/layui.js"></script>
+    <script type="text/javascript" src="/layui/layui.all.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery.json.js"></script>
+    <script type="text/javascript" src="/Scripts/Common.js"></script>
+</head>
+<body>
+    <form class="layui-form" action="" id="addStaffForm">
+        <div class="layui-form-item"></div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">员工编号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="No" id="txtNo" value="@Model.No" autocomplete="off" required lay-verify="required" class="layui-input">
+                <input type="hidden" name="Id" value="@Model.Id" />
+            </div>
+            <label class="layui-form-label">员工姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="Name" id="txtName" value="@Model.Name" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">出生日期</label>
+            <div class="layui-input-inline">
+                <input type="text" name="BirthDay"  id="dtBirthDay" required lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">员工性别</label>
+            <div class="layui-input-inline" id="sexselect">
+                   <input type="radio" name="Sex" id="rd_Sex_Man" value="1" title="男" >
+                   <input type="radio" name="Sex" id="rd_Sex_WoMan" value="0" title="女">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">籍贯</label>
+            <div class="layui-input-inline">
+                <input type="text" value="@Model.NativePlace" name="NativePlace" required lay-verify="required" id="txtNativePlace" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">联系地址</label>
+            <div class="layui-input-inline">
+                <input type="text" value="@Model.Address" name="Address" id="txtAddress" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系电话</label>
+            <div class="layui-input-inline">
+                <input type="text" name="Tel" value="@Model.Tel" required lay-verify="required|phone" id="txtTel" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-inline">
+                <input type="text" name="Email" value="@Model.Email" required lay-verify="required|email" id="txtEmail" autocomplete="off" class="layui-input">
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">职位</label>
+            <div class="layui-input-inline">
+                <input type="text" name="JobName" value="@Model.JobName" readonly="readonly" required lay-verify="required" id="txtJobName" autocomplete="off" class="layui-input" />
+                <input type="hidden" name="JobId" value="@Model.JobId" id="hidJobID" />
+            </div>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-danger" onclick="ChoiceJob()">选择职位</button>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属机构</label>
+            <div class="layui-input-inline">
+                <input type="text" name="OrgName" value="@Model.OrjName" id="txtOrgName" readonly="readonly" required lay-verify="required" autocomplete="off" class="layui-input">
+                <input type="hidden" name="OrgID" id="hidOrgID" value="@Model.OrgID" />
+            </div>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-radius layui-btn-danger" onclick="ChoiceOrg()">选择机构</button>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-inline">
+                <select name="Status" id="selStatus" lay-verify="required">
+                    <option value="1">在职</option>
+                    <option value="0">离职</option>
+                    <option value="2">在职休假</option>
+                    <option value="3">其他</option>
+                </select>
+             </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="text-align: center;">
+                <button class="layui-btn" lay-submit="" lay-filter="formInput" data-form-sbm="1524446636424.743" style="pointer-events: auto;">保存</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+    <script>
+        //处理工作状态
+        $("#selStatus").val(@Model.Status);
+        //性别处理
+        if ("@Model.Sex" == "True") {
+            $("#sexselect > input:eq(0)").prop("checked", "checked");
+        } else {
+             $("#sexselect > input:eq(1)").prop("checked","checked");
+        }
+
+        layui.use(['form', 'laydate'], function () {
+            var laydate = layui.laydate;
+            //自定义日期格式
+            laydate.render({
+                elem: '#dtBirthDay'
+                , format: 'yyyy年MM月dd日' //可任意组合
+                , value:'@Convert.ToDateTime(Model.BirthDay).ToLongDateString().ToString()'//指定开始日期
+            });
+            var form = layui.form;
+            //监听提交
+            form.on('submit(formInput)', function (data) {
+                //此处用于提交新增员工信息的ajax处理
+                AjaxRequest();
+                return false;
+            });
+            form.render();
+        });
+
+        function AjaxRequest() {
+           //alert($("#addStaffForm").serialize());
+             //请求时 前台等待
+            var index = layer.load(3);
+            $.ajax({
+                url: "/StaffManage/UpdateStaffInfo",
+                type: "post",
+                data: $("#addStaffForm").serialize(),
+                dataType:"text",
+                success: function (d, s) {
+                    if (d == "T") {
+                        layer.msg("修改成功!", CloseLayerWindown());
+                        parent.layui.table.reload('stafftable');
+                    } else {
+                        layer.msg("修改失败!", CloseLayerWindown());
+                    }
+                }
+            }).done(function () {
+                layer.close(index);//请求完毕 关闭
+            });
+        }
+
+        var job = { Name: "", Id: "" }; //职位对象
+        var org = { Name: "", Id: "" };//组织机构对象
+
+        //职位选择
+        function ChoiceJob() {
+            layer.open({
+                type: 2,
+                content: "/JobManger/Index",
+                area: ['580px', '410px'],
+                title: "选择职位",
+                end: function () {
+                    $("#txtJobName").val(job.Name); //在职位选择界面会对B中定义的职位json赋值（变量名称job）
+                    $("#hidJobID").val(job.Id);
+                    //alert(job.Id + "|" + job.Name);
+                }
+            });
+
+        }
+
+        //选择组织机构
+        function ChoiceOrg() {
+              layer.open({
+                type: 2,
+                content: "/OrganizationManger/Index",
+                area: ['580px', '410px'],
+                title: "选择组织",
+                end: function () {
+                    $("#txtOrgName").val(org.Name); //在职位选择界面会对B中定义的职位json赋值（变量名称job）
+                    $("#hidOrgID").val(org.Id);
+                    //alert(org.Id + "|" + org.Name);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

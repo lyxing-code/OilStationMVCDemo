@@ -121,9 +121,14 @@
             return parseInt(span / (1000 * 60 * 60 * 24 * 360));
         }
 
-        //修改员工信息
+        //修改员工信息弹出层
         function UpdateJob(id) {
-            alert(id);
+            layer.open({
+                type: 2,
+                content: "/StaffManage/UpdateStaffInfo?uid="+id,
+                area: ['680px', '510px'],
+                title: "员工信息修改"
+            });
         }
 
         //添加员工弹出层

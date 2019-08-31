@@ -504,6 +504,7 @@
     <Content Include="Views\OrganizationManger\UpdateOrganize.cshtml" />
     <Content Include="Views\StaffManage\Index.cshtml" />
     <Content Include="Views\StaffManage\AddStaffInfo.cshtml" />
+    <Content Include="Views\StaffManage\UpdateStaffInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

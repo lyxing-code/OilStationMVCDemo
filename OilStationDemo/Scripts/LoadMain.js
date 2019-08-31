@@ -4,10 +4,13 @@ function LoadMain(url) {
     var newUrl = "";
     switch (url) {
         case "BasicDataMaintenance/JobManager.aspx":
-            newUrl = "/JobManger/Index";
+            newUrl = "/JobManger/Index?selected=true";
             break;
         case "BasicDataMaintenance/OrganizationStructureManger.aspx":
-            newUrl = "/OrganizationManger/Index";
+            newUrl = "/OrganizationManger/Index?selected=true";
+            break;
+        case "BasicDataMaintenance/StaffManager.aspx":
+            newUrl = "/StaffManage/Index";
             break;
         default:
             break;

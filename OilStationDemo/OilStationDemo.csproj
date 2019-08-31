@@ -131,6 +131,7 @@
     <Compile Include="Controllers\BasicDataMaintenance\JobMangerController.cs" />
     <Compile Include="Controllers\BasicDataMaintenance\OrganizationMangerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\BasicDataMaintenance\StaffManageController.cs" />
     <Compile Include="Controllers\UpdateController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -197,6 +198,9 @@
       <DependentUpon>OMOSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\v_Organization.cs">
+      <DependentUpon>OMOSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\v_staffinfo.cs">
       <DependentUpon>OMOSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\v_staffmune.cs">
@@ -498,6 +502,8 @@
     <Content Include="Views\OrganizationManger\Index.cshtml" />
     <Content Include="Views\OrganizationManger\AppendOrganize.cshtml" />
     <Content Include="Views\OrganizationManger\UpdateOrganize.cshtml" />
+    <Content Include="Views\StaffManage\Index.cshtml" />
+    <Content Include="Views\StaffManage\AddStaffInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -10,8 +10,10 @@ namespace OilStationDemo.Controllers.BasicDataMaintenance
     {
         Models.OSMSEntities DB = new Models.OSMSEntities();
         // GET: BasicDataMaintenance DeleteById
-        public ActionResult Index()
+        public ActionResult Index(bool selected = false)
         {
+            //用来控制浏览和操作的控制
+            ViewBag.SelectStatus = selected ? "1" : "0";
             return View();
         }
 

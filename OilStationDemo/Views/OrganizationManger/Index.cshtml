@@ -11,9 +11,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>组织结构管理</title>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-3.3.1.js"></script>
     <script src="~/layui/layui.all.js"></script>
-    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/Scripts/Common.js"></script>
     <style>
         html, body {
             height: 100%;
@@ -60,7 +61,7 @@
 
 <body>
     <div style="height: 100%">
-        <div class="layui-layer-title layui-bg-green">
+        <div class="layui-layer-title layui-bg-green" id="selectStatus">
             <label style="color: white;"> 基础信息维护<i class="layui-icon"> &#xe65b;</i> 组织机构管理</label>
             <a class="layui-btn layui-btn-primary layui-btn-sm" onclick="AddChildOrg()" lay-filter="addChild"> 添加子机构</a>
             <a class="layui-btn layui-btn-primary layui-btn-sm" lay-filter="update" onclick="UpdateData();" id="btnUpdate"> 修改机构</a>
@@ -71,6 +72,12 @@
         </div>
     </div>
     <script>
+        if (@ViewBag.SelectStatus == "0") {
+            $("#selectStatus").hide();
+        }
+        else {
+            $("#selectStatus").show();
+        }
 
         var editObj = null, ptable = null, treeGrid = null, tableId = 'treeTable', layer = null;
         //导入插件的资源配置文件
@@ -99,11 +106,11 @@
                 method: 'get',
                 isPage: false,
                 cols: [[
-                    { type: 'radio' },			//单选框列
-                    { field: 'Name', width: 300, title: '组织机构名称', align: "center" }
-                    , { field: 'Code', width: 300, title: '代码', align: "center" }
+                    { field: 'Id',type: 'radio' },			//单选框列
+                    { field: 'Name', width: 200, title: '组织机构名称', align: "center" }
+                    , { field: 'Code', width: 200, title: '代码', align: "center" }
                     , {
-                        field: 'Leve', title: '区域级别', align: "center", templet: function (da) {							//将区域等级数字转换为对应级别的汉字
+                        field: 'Leve',width: 100, title: '区域级别', align: "center", templet: function (da) {							//将区域等级数字转换为对应级别的汉字
                             if (da.Leve == "0") {
                                 return "总部";
                             }
@@ -114,8 +121,27 @@
                             else if (da.Leve == "3")
                                 return "油站";
                         }
+                    },
+                     {
+                           field: 'Select', width: 100, title: '选择',  align: "center",templet: function (data) {
+                           return "<a class=\"layui-btn layui-btn-sm layui-btn-normal\" href=\"javascript:void(0)\" onclick=\"ChoiceConfirm('" + data.Id + "','" + data.Name + "')\">选择</a>";
+                       }
+                     }
+                ]],
+                done: function () {
+                    //选择组织时 隐藏单选框列 显示选择列
+                    if (@ViewBag.SelectStatus == "0") 
+                    {
+                        $("[data-field='Id']").css('display', 'none');
+                        $("[data-field='Select']").css('display', 'display');
                     }
-                ]]
+                    else {
+                        //浏览时 隐藏选择列 显示单选框列
+                        $("[data-field='Select']").css('display', 'none');
+                        $("[data-field='Id']").css('display', 'display');
+                    }
+
+                }
 
             });
         });
@@ -123,7 +149,7 @@
         //添加子节点
         function AddChildOrg() {
             //获取选择的树节点
-            var data = treeGrid.radioStatus(tableId); 
+            var data = treeGrid.radioStatus(tableId);
             //判断是否选中
             if (JSON.stringify(data) == "{}") {
                 layer.msg("没有选择父级组织结构不能增加子级组织");
@@ -136,14 +162,14 @@
                     area: ['460px', '420px'],
                     title: "添加组织结构"
                 });
-               layer.close(index);//请求完毕 关闭
+                layer.close(index);//请求完毕 关闭
             }
         }
 
-    //修改当前节点的信息
-    function UpdateData() {
-        //获取选择的树节点
-            var data = treeGrid.radioStatus(tableId); 
+        //修改当前节点的信息
+        function UpdateData() {
+            //获取选择的树节点
+            var data = treeGrid.radioStatus(tableId);
             //判断是否选中
             if (JSON.stringify(data) == "{}") {
                 layer.msg("没有选择父级组织结构不能增加子级组织");
@@ -156,14 +182,14 @@
                     area: ['460px', '420px'],
                     title: "修改组织结构"
                 });
-               layer.close(index);//请求完毕 关闭
+                layer.close(index);//请求完毕 关闭
             }
-    } 
+        }
 
+        //移除节点
+        function DeleteDate() {
 
-    function DeleteDate() {
-
-         var data = treeGrid.radioStatus(tableId); 
+            var data = treeGrid.radioStatus(tableId);
             //判断是否选中
             if (JSON.stringify(data) == "{}") {
                 layer.msg("没有选择父级组织结构不能增加子级组织");
@@ -171,21 +197,21 @@
             else {
                 var index = layer.load(2);
                 DelAction(data.Id);
-               layer.close(index);//请求完毕 关闭
+                layer.close(index);//请求完毕 关闭
             }
 
-         
 
-    }
 
-    function DelAction(id) {
-        layer.confirm("确定要删除吗？",
+        }
+
+        function DelAction(id) {
+            layer.confirm("确定要删除吗？",
                 {
                     btn: ["确定", "取消"]
                 }, function (index, layero) {
                     var index = layer.load(3);
                     $.post("/OrganizationManger/DeleteById", { gid: id }, function (d, s) {
-                        
+
                         if (d == "T") {
                             layer.msg("删除操作成功!");
                             //重新刷新父界面中的表格数据 test为父窗口中表格的id号
@@ -201,8 +227,15 @@
                     //取消操作的代码
                     //do nothing
                 });
-    }
+        }
 
+        //传值到父窗口页面的json
+        function ChoiceConfirm(id, name) {
+            parent.org.Id = id;
+            parent.org.Name = name;
+            CloseLayerWindown();									
+
+        }
 
     </script>
 </body>

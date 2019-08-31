@@ -43,6 +43,7 @@ namespace OilStationDemo.Models
         public virtual DbSet<StaffRole> StaffRole { get; set; }
         public virtual DbSet<v_staffmune> v_staffmune { get; set; }
         public virtual DbSet<v_Organization> v_Organization { get; set; }
+        public virtual DbSet<v_staffinfo> v_staffinfo { get; set; }
     
         public virtual int P_Pager(ObjectParameter recordTotal, string viewName, string fieldName, string keyName, Nullable<int> pageSize, Nullable<int> pageNo, string orderString, string whereString)
         {

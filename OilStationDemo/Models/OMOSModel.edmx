@@ -301,6 +301,31 @@
           <Property Name="ParentCode" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <!--生成过程中发现错误:
+警告 6002: 表/视图“OSMS.dbo.v_staffinfo”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="v_staffinfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="No" Type="nvarchar" MaxLength="500" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="Sex" Type="bit" />
+          <Property Name="BirthDay" Type="date" />
+          <Property Name="NativePlace" Type="nvarchar" MaxLength="500" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" />
+          <Property Name="Password" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Tel" Type="nvarchar" MaxLength="20" />
+          <Property Name="Status" Type="char" MaxLength="1" />
+          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="JobId" Type="uniqueidentifier" />
+          <Property Name="OrgID" Type="uniqueidentifier" />
+          <Property Name="IsHSEGroup" Type="bit" />
+          <Property Name="JobName" Type="nvarchar" MaxLength="100" />
+          <Property Name="OrjName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <!--生成过程中发现错误:
 警告 6002: 表/视图“OSMS.dbo.v_staffmune”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
         <EntityType Name="v_staffmune">
           <Key>
@@ -406,6 +431,28 @@
     [v_Organization].[ParentName] AS [ParentName], 
     [v_Organization].[ParentCode] AS [ParentCode]
     FROM [dbo].[v_Organization] AS [v_Organization]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_staffinfo" EntityType="Self.v_staffinfo" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_staffinfo].[Id] AS [Id], 
+    [v_staffinfo].[No] AS [No], 
+    [v_staffinfo].[Name] AS [Name], 
+    [v_staffinfo].[Sex] AS [Sex], 
+    [v_staffinfo].[BirthDay] AS [BirthDay], 
+    [v_staffinfo].[NativePlace] AS [NativePlace], 
+    [v_staffinfo].[Address] AS [Address], 
+    [v_staffinfo].[Password] AS [Password], 
+    [v_staffinfo].[Email] AS [Email], 
+    [v_staffinfo].[Tel] AS [Tel], 
+    [v_staffinfo].[Status] AS [Status], 
+    [v_staffinfo].[CreateTime] AS [CreateTime], 
+    [v_staffinfo].[UpdateTime] AS [UpdateTime], 
+    [v_staffinfo].[JobId] AS [JobId], 
+    [v_staffinfo].[OrgID] AS [OrgID], 
+    [v_staffinfo].[IsHSEGroup] AS [IsHSEGroup], 
+    [v_staffinfo].[JobName] AS [JobName], 
+    [v_staffinfo].[OrjName] AS [OrjName]
+    FROM [dbo].[v_staffinfo] AS [v_staffinfo]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="v_staffmune" EntityType="Self.v_staffmune" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -779,6 +826,7 @@
             <Parameter Name="whereString" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="v_Organization" EntityType="OSMSModel.v_Organization" />
+          <EntitySet Name="v_staffinfo" EntityType="OSMSModel.v_staffinfo" />
         </EntityContainer>
         <EntityType Name="v_Organization">
           <Key>
@@ -798,6 +846,29 @@
           <Property Name="IsDel" Type="Boolean" Nullable="false" />
           <Property Name="ParentName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ParentCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="v_staffinfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="No" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Sex" Type="Boolean" />
+          <Property Name="BirthDay" Type="DateTime" Precision="0" />
+          <Property Name="NativePlace" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Tel" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="JobId" Type="Guid" />
+          <Property Name="OrgID" Type="Guid" />
+          <Property Name="IsHSEGroup" Type="Boolean" />
+          <Property Name="JobName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OrjName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1103,6 +1174,30 @@
                 <ScalarProperty Name="Leve" ColumnName="Leve" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_staffinfo">
+            <EntityTypeMapping TypeName="OSMSModel.v_staffinfo">
+              <MappingFragment StoreEntitySet="v_staffinfo">
+                <ScalarProperty Name="OrjName" ColumnName="OrjName" />
+                <ScalarProperty Name="JobName" ColumnName="JobName" />
+                <ScalarProperty Name="IsHSEGroup" ColumnName="IsHSEGroup" />
+                <ScalarProperty Name="OrgID" ColumnName="OrgID" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="NativePlace" ColumnName="NativePlace" />
+                <ScalarProperty Name="BirthDay" ColumnName="BirthDay" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="No" ColumnName="No" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

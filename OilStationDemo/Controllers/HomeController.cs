@@ -33,7 +33,7 @@ namespace OilStationDemo.Controllers
         [HttpPost]
         public ActionResult Login(string no , string pwd)
         {
-            pwd = HelperTools.EncryptHelper.Encode(pwd);
+            //pwd = HelperTools.EncryptHelper.Encode(pwd);
            
             Models.Staff staffInfo = DB.Staff.FirstOrDefault(o => o.No.Equals(no) && o.Password.Equals(pwd));
            

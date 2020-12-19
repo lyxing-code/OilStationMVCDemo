@@ -12,6 +12,8 @@ namespace OilStationDemo.Controllers
         // GET: Update
         public ActionResult UpdatePwd()
         {
+            Models.Staff staffinfo = (Models.Staff)Session["loginuser"];
+            ViewBag.No = staffinfo.No;
             return View();
         }
 
